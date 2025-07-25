@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { crearReserva } from "../services/api";
+import "./App.css"; // O cambia por el que uses como principal
 
 function ReservaForm() {
   const [form, setForm] = useState({
@@ -36,70 +37,68 @@ function ReservaForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-      <label>Fecha</label>
+    <form className="reserva-form" onSubmit={handleSubmit}>
+      <h2 className="form-title">Nueva Reserva</h2>
+
       <input
         type="date"
         name="fecha"
         value={form.fecha}
         onChange={handleChange}
+        placeholder="Fecha"
+        className="form-input"
         required
       />
-
-      <label>Hora</label>
       <input
         type="time"
         name="hora"
         value={form.hora}
         onChange={handleChange}
+        placeholder="Hora"
+        className="form-input"
         required
       />
-
-      <label>Nombre</label>
       <input
         name="nombre"
         value={form.nombre}
         onChange={handleChange}
-        placeholder="Nombre"
+        placeholder="Nombre del cliente"
+        className="form-input"
         required
       />
-
-      <label>Teléfono</label>
       <input
         name="telefono"
         value={form.telefono}
         onChange={handleChange}
         placeholder="Teléfono"
+        className="form-input"
         required
       />
-
-      <label>Cantidad de personas</label>
       <input
         type="number"
         name="cantidad"
         value={form.cantidad}
         onChange={handleChange}
         placeholder="Cantidad de personas"
+        className="form-input"
         required
       />
-
-      <label>Tomado por</label>
       <input
         name="tomadoPor"
         value={form.tomadoPor}
         onChange={handleChange}
         placeholder="Tomado por"
+        className="form-input"
       />
-
-      <label>Observaciones</label>
-      <input
+      <textarea
         name="observaciones"
         value={form.observaciones}
         onChange={handleChange}
         placeholder="Observaciones"
+        className="form-input"
+        rows="3"
       />
-
-      <button type="submit">Crear Reserva</button>
+      <button type="submit" className="form-button">Crear Reserva</button>
     </form>
   );
 }
