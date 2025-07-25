@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./App.css"; // o "styles.css" si preferís
+import "../App.css"; // o "styles.css" si preferís
 
 function ExportarReservas() {
   const [desde, setDesde] = useState(() => {
