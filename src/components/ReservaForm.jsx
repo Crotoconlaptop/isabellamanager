@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { crearReserva } from "../services/api";
-import "./App.css"; // O cambia por el que uses como principal
+import "../App.css"; // O cambia por el que uses como principal
 
 function ReservaForm() {
   const [form, setForm] = useState({
