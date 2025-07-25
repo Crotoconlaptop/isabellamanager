@@ -48,3 +48,29 @@ export async function exportarReservas(desde, hasta) {
   const csvContent = csvRows.map(e => e.join(',')).join('\n');
   return new Blob([csvContent], { type: 'text/csv' });
 }
+
+// src/services/api.js
+import { createClient } from "@supabase/supabase-js";
+import { saveAs } from "file-saver";
+import * as XLSX from "xlsx";
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+export async function exportarReservas(desde, hasta) {
+  const { data, error } = await supabase
+    .from("reservas")
+    .select("*")
+    .gte("fecha", desde)
+    .lte("fecha", hasta);
+
+  if (error) throw new Error("Error al traer las reservas");
+
+  const worksheet = XLSX.utils.json_to_sheet(data);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Reservas");
+  const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+  const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+  saveAs(blob, `reservas_${desde}_a_${hasta}.xlsx`);
+}

@@ -1,106 +1,58 @@
 import { useState } from "react";
-import { crearReserva } from "../services/api";
-import "../App.css"; // O cambia por el que uses como principal
+import "./App.css"; // o "styles.css" si preferís
 
-function ReservaForm() {
-  const [form, setForm] = useState({
-    fecha: "",
-    hora: "",
-    nombre: "",
-    telefono: "",
-    cantidad: "",
-    tomadoPor: "",
-    observaciones: ""
+function ExportarReservas() {
+  const [desde, setDesde] = useState(() => {
+    const hoy = new Date();
+    return hoy.toISOString().split("T")[0]; // YYYY-MM-DD
   });
 
-  function handleChange(e) {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  }
+  const [hasta, setHasta] = useState(() => {
+    const hoy = new Date();
+    hoy.setDate(hoy.getDate() + 7); // una semana después
+    return hoy.toISOString().split("T")[0];
+  });
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function handleExportar() {
     try {
-      await crearReserva(form);
-      alert("Reserva creada con éxito");
-      setForm({
-        fecha: "",
-        hora: "",
-        nombre: "",
-        telefono: "",
-        cantidad: "",
-        tomadoPor: "",
-        observaciones: ""
-      });
-    } catch (err) {
-      alert(err.message || "Error al crear reserva");
+      const response = await fetch(
+        `https://<TU-PROYECTO>.supabase.co/functions/v1/exportar?desde=${desde}&hasta=${hasta}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Error al exportar reservas");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "reservas.csv";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      alert("No se pudo exportar: " + error.message);
     }
   }
 
   return (
-    <form className="reserva-form" onSubmit={handleSubmit}>
-      <h2 className="form-title">Nueva Reserva</h2>
-
-      <input
-        type="date"
-        name="fecha"
-        value={form.fecha}
-        onChange={handleChange}
-        placeholder="Fecha"
-        className="form-input"
-        required
-      />
-      <input
-        type="time"
-        name="hora"
-        value={form.hora}
-        onChange={handleChange}
-        placeholder="Hora"
-        className="form-input"
-        required
-      />
-      <input
-        name="nombre"
-        value={form.nombre}
-        onChange={handleChange}
-        placeholder="Nombre del cliente"
-        className="form-input"
-        required
-      />
-      <input
-        name="telefono"
-        value={form.telefono}
-        onChange={handleChange}
-        placeholder="Teléfono"
-        className="form-input"
-        required
-      />
-      <input
-        type="number"
-        name="cantidad"
-        value={form.cantidad}
-        onChange={handleChange}
-        placeholder="Cantidad de personas"
-        className="form-input"
-        required
-      />
-      <input
-        name="tomadoPor"
-        value={form.tomadoPor}
-        onChange={handleChange}
-        placeholder="Tomado por"
-        className="form-input"
-      />
-      <textarea
-        name="observaciones"
-        value={form.observaciones}
-        onChange={handleChange}
-        placeholder="Observaciones"
-        className="form-input"
-        rows="3"
-      />
-      <button type="submit" className="form-button">Crear Reserva</button>
-    </form>
+    <div className="exportar-container">
+      <h2>Exportar reservas</h2>
+      <div className="exportar-form">
+        <label>
+          Desde:
+          <input type="date" value={desde} onChange={(e) => setDesde(e.target.value)} />
+        </label>
+        <label>
+          Hasta:
+          <input type="date" value={hasta} onChange={(e) => setHasta(e.target.value)} />
+        </label>
+        <button onClick={handleExportar}>Descargar Excel</button>
+      </div>
+    </div>
   );
 }
 
-export default ReservaForm;
+export default ExportarReservas;
