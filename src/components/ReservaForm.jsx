@@ -19,10 +19,7 @@ function ReservaForm() {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      await crearReserva({
-        ...form,
-        cantidad: parseInt(form.cantidad, 10),
-      });
+      await crearReserva(form);
       alert("Reserva creada con éxito");
       setForm({
         fecha: "",
@@ -39,88 +36,70 @@ function ReservaForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-      <label>
-        Fecha
-        <input
-          type="date"
-          name="fecha"
-          value={form.fecha}
-          onChange={handleChange}
-          placeholder="Seleccionar fecha"
-          required
-        />
-      </label>
+    <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+      <label>Fecha</label>
+      <input
+        type="date"
+        name="fecha"
+        value={form.fecha}
+        onChange={handleChange}
+        required
+      />
 
-      <label>
-        Hora
-        <input
-          type="time"
-          name="hora"
-          value={form.hora}
-          onChange={handleChange}
-          placeholder="Seleccionar hora"
-          required
-        />
-      </label>
+      <label>Hora</label>
+      <input
+        type="time"
+        name="hora"
+        value={form.hora}
+        onChange={handleChange}
+        required
+      />
 
-      <label>
-        Nombre
-        <input
-          name="nombre"
-          value={form.nombre}
-          onChange={handleChange}
-          placeholder="Nombre"
-          required
-        />
-      </label>
+      <label>Nombre</label>
+      <input
+        name="nombre"
+        value={form.nombre}
+        onChange={handleChange}
+        placeholder="Nombre"
+        required
+      />
 
-      <label>
-        Teléfono
-        <input
-          name="telefono"
-          value={form.telefono}
-          onChange={handleChange}
-          placeholder="Teléfono"
-          required
-        />
-      </label>
+      <label>Teléfono</label>
+      <input
+        name="telefono"
+        value={form.telefono}
+        onChange={handleChange}
+        placeholder="Teléfono"
+        required
+      />
 
-      <label>
-        Cantidad de personas
-        <input
-          type="number"
-          name="cantidad"
-          value={form.cantidad}
-          onChange={handleChange}
-          placeholder="Cantidad de personas"
-          required
-        />
-      </label>
+      <label>Cantidad de personas</label>
+      <input
+        type="number"
+        name="cantidad"
+        value={form.cantidad}
+        onChange={handleChange}
+        placeholder="Cantidad de personas"
+        required
+      />
 
-      <label>
-        Tomado por
-        <input
-          name="tomadoPor"
-          value={form.tomadoPor}
-          onChange={handleChange}
-          placeholder="Tomado por"
-        />
-      </label>
+      <label>Tomado por</label>
+      <input
+        name="tomadoPor"
+        value={form.tomadoPor}
+        onChange={handleChange}
+        placeholder="Tomado por"
+      />
 
-      <label>
-        Observaciones
-        <input
-          name="observaciones"
-          value={form.observaciones}
-          onChange={handleChange}
-          placeholder="Observaciones"
-        />
-      </label>
+      <label>Observaciones</label>
+      <input
+        name="observaciones"
+        value={form.observaciones}
+        onChange={handleChange}
+        placeholder="Observaciones"
+      />
 
-      <button type="submit" style={{ padding: "10px", fontWeight: "bold" }}>
-        Crear Reserva
-      </button>
+      <button type="submit">Crear Reserva</button>
     </form>
   );
 }
